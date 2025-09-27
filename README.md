@@ -47,22 +47,22 @@ Se trabaja con datos de expresión génica, viabilidad celular y metadatos exper
 import pandas as pd
 from sklearn.tree import DecisionTreeClassifier
 
-# Cargar datos de entrenamiento
+# Primero, cargar los datos de entrenamiento
 datos_entrenamiento = pd.read_csv("train_drug.csv")
 
-# Separar variables predictoras y variable objetivo
+# Se separan las variables predictoras y la variable objetivo
 X_entrenamiento = datos_entrenamiento.drop("Drug", axis=1)
 y_entrenamiento = datos_entrenamiento["Drug"]
 
-# Definir y entrenar el modelo
+# Se definie y se entrena el modelo
 modelo = DecisionTreeClassifier(random_state=42)
 modelo.fit(X_entrenamiento, y_entrenamiento)
 
-# Cargar datos de prueba
+# Cargan los datos de prueba
 datos_prueba = pd.read_csv("test_features.csv")
 
-# Realizar predicciones
+# Se realizan las predicciones
 predicciones = modelo.predict(datos_prueba)
 
-# Guardar resultados en un archivo CSV
+# Se guardan los resultados en un archivo CSV
 pd.DataFrame({"Prediccion": predicciones}).to_csv("submission.csv", index=False)
