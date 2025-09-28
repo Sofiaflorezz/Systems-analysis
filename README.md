@@ -1,68 +1,27 @@
+# Predicción de mecanismos de acción (MoA) 
 
-# Proyecto: Predicción de Mecanismos de Acción (MoA)  
+Este repositorio contiene el análisis y la implementación realizada para la competencia **Mechanisms of Action (MoA) Prediction** de Kaggle.
 
-Este proyecto se centra en la competencia MoA Prediction, cuyo objetivo es predecir los mecanismos de acción de distintos compuestos a partir de datos biológicos de alta dimensión.  
+## Análisis del sistema
 
-Se trabaja con datos de expresión génica, viabilidad celular y metadatos experimentales, aplicando técnicas de Machine Learning.
+El análisis del sistema se realizó siguiendo un enfoque de **ingeniería de sistemas**, con el objetivo de comprender y modelar la dinámica de la competencia.
 
------
+### 1) Definición de componentes
+- **Entradas**: variables de expresión génica (*g-variables*), características celulares (*c-variables*) y metadatos experimentales (tipo de compuesto, dosis y tiempo de exposición).
+- **Procesos**: preprocesamiento (normalización, reducción de dimensionalidad y selección de variables), modelado mediante algoritmos de clasificación multietiqueta (redes neuronales, *gradient boosting* y regresión logística), y evaluación con la métrica *log loss*.
+- **Salidas**: vectores de probabilidad para cada uno de los **206** mecanismos de acción.
 
-# Archivos del proyecto  
+### 2) Relaciones y dependencias
+Se identificó cómo las variables de entrada interactúan entre sí: la expresión génica influye en la viabilidad celular y los metadatos (tipo de compuesto, dosis, tiempo) **modulan** esas respuestas. Estas dependencias condicionan el rendimiento de los modelos y muestran la **sensibilidad** del sistema a parámetros como *cp_type* o *cp_dose*.
 
-- **train_drug.csv** → Datos de entrenamiento (incluyen la variable objetivo con las etiquetas de fármacos o mecanismos de acción).  
-- **test_features.csv** → Datos de prueba (solo variables predictoras, sin la columna objetivo).  
-- **sample_submission.csv** → Archivo de ejemplo de cómo deben enviarse las predicciones.  
-- **submission.csv** → Archivo final con las predicciones generadas por el modelo.  
+### 3) Flujo de datos y retroalimentación
+El sistema se representó en un flujo de módulos:
+**Entrada → Preprocesamiento → Modelado → Evaluación → Salida**
 
------
 
-# Flujo del sistema 
+### 4) Perspectiva sistémica
+- **Limitaciones**: no descubre nuevos mecanismos y depende de la calidad de los datos (clases raras, ruido, efectos de lote).
+- **Requisitos no funcionales**: reproducibilidad, control de versiones (datos/modelos) y documentación del pipeline.
 
-1. **Entradas (Inputs)**  
-   - Datos de expresión génica.  
-   - Medidas de viabilidad celular.  
-   - Metadatos experimentales.
-
-2. **Preprocesamiento**  
-   - Normalización de variables.  
-   - Reducción de dimensionalidad (PCA, selección de características).  
-   - Manejo de variabilidad y control de ruido.  
-
-3. **Modelado**  
-   - Se aplican algoritmos de aprendizaje automático para transformar los datos en predicciones.  
-   - Se probaron enfoques (árboles de decisión, random forest)
-
-4. **Evaluación**  
-   - Se comparan las probabilidades predichas con las etiquetas reales usando la métrica log loss.  
-   - Retroalimentación que permite ajustar y mejorar el modelo.  
-
-5. **Salida (Outputs)**  
-   - Archivo submission.csv con las predicciones para cada muestra y mecanismo de acción.  
-
----
-
-# Código de entrenamiento del modelo  
-
-```python
-import pandas as pd
-from sklearn.tree import DecisionTreeClassifier
-
-# Primero, cargar los datos de entrenamiento
-datos_entrenamiento = pd.read_csv("train_drug.csv")
-
-# Se separan las variables predictoras y la variable objetivo
-X_entrenamiento = datos_entrenamiento.drop("Drug", axis=1)
-y_entrenamiento = datos_entrenamiento["Drug"]
-
-# Se definie y se entrena el modelo
-modelo = DecisionTreeClassifier(random_state=42)
-modelo.fit(X_entrenamiento, y_entrenamiento)
-
-# Cargan los datos de prueba
-datos_prueba = pd.read_csv("test_features.csv")
-
-# Se realizan las predicciones
-predicciones = modelo.predict(datos_prueba)
-
-# Se guardan los resultados en un archivo CSV
-pd.DataFrame({"Prediccion": predicciones}).to_csv("submission.csv", index=False)
+## Conclusión
+El problema se entiende como un sistema **interconectado, no lineal y sensible**, donde cada módulo depende del anterior. Una coordinación adecuada entre preprocesamiento, modelado y evaluación permite obtener predicciones consistentes y útiles para investigación biomédica.
