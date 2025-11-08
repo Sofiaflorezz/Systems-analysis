@@ -1,29 +1,25 @@
 # MoA Prediction - Workshop 3
 
-## Project overview
-This repository contains the code, data processing pipelines and documentation
-for the Mechanism of Action (MoA) prediction project (Kaggle challenge).
+Este proyecto consolida el diseño de un sistema de predicción de Mecanismos de Acción (MoA) aplicando principios de **ingeniería robusta** y **gestión de proyectos**. El objetivo es refinar la arquitectura y elevar su **confiabilidad, escalabilidad, mantenibilidad y usabilidad**, alineando las decisiones con estándares de calidad como **ISO 9000**, **CMMI** y **Six Sigma**.
 
-## Requirements
-- Python
-- PyTorch or TensorFlow for deep models
-- Docker
+### Arquitectura y componentes
+El sistema se estructura en una **arquitectura modular** con cinco módulos ejecutables e independientes, lo que facilita pruebas, reemplazos y evolución del pipeline:
+- **Data Loader:** carga y validación del dataset (verificación de columnas, faltantes).
+- **Preprocessing:** limpieza, transformación y normalización de variables.
+- **Model Trainer:** entrenamiento y registro de métricas (Random Forest / NN simple).
+- **Prediction:** generación de predicciones y archivo de envío.
+- **Report Generator:** visualización de métricas y resultados.
+La modularidad permite intercambiar modelos/datasets sin afectar el resto del sistema y mantener **versionado** y **reproductibilidad** (GitHub).
 
-## Quickstart
-1. Clone the repository
-2. Prepare data: place the competition files in /data
-3. Run preprocessing: `python src/preprocess.py`
-4. Train baseline model: `python src/train_baseline.py`
-5. Evaluate: `python src/evaluate.py`
-6. Generate submission: `python src/generate_submission.py`
+### Calidad, riesgos y mitigación
+Se identificaron riesgos clave y se definieron estrategias de control:
+- **Calidad de datos:** EDA, detección de faltantes/outliers, normalización y alertas tempranas.
+- **Sobreajuste:** validación cruzada, ajuste de hiperparámetros, early stopping y versionado de modelos.
+- **Interpretabilidad:** uso de **SHAP/LIME** y reportes de importancia de características para validar consistencia biológica.
+- **Flujo del pipeline:** controles de entrada/salida por módulo y verificación de persistencia de resultados.
 
-## Structure
-- /data : raw and processed datasets (not included)
-- /src : preprocessing, modeling, and evaluation scripts
-- /notebooks : exploratory analysis and experiments
-- /reports : final LaTeX report and figures
+### Gestión del proyecto
+Se establecieron **roles**, **hitos** y **entregables** con un cronograma de cinco semanas, y se adoptó **Kanban** (Trello/Miro) para la orquestación del trabajo (visibilidad del estado, adaptación a cambios, detección de bloqueos y seguimiento transparente). La documentación y el control de versiones en **GitHub** aseguran trazabilidad y colaboración.
 
-## Reproducibility
-Use Docker to replicate the environment:
-`docker build -t moa-env .`
-`docker run --rm -v $(pwd):/work moa-env bash -c "python src/preprocess.py"`
+### Mejoras y estado actual
+Durante esta fase se **refinó la arquitectura**, se precisaron **estrategias de mitigación y monitoreo**, y se reforzó la **documentación**. El sistema queda preparado para fases siguientes de implementación y optimización continua, manteniendo calidad de resultados y sostenibilidad del desarrollo.
