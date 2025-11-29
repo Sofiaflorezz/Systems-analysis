@@ -71,13 +71,3 @@ To make the MoA prediction system more resilient, the report proposes:
    - Attach an explicit **uncertainty estimate** to each prediction.
    - Enable more informed decision-making in regions where the model may behave chaotically.
 
-
-
-## Suggested Repository Structure
-
-> Adjust or rename these folders according to your actual project layout.
-
-- `report/` – PDF of the Workshop 4 simulation report.  
-- `notebooks/` – Jupyter notebooks for Random Forest experiments and `cp_time` perturbations.  
-- `ca_simulation/` – Cellular automaton implementation and chaos experiments.  
-- `data/` – Data preprocessing scripts and/or sample datasets (if applicable).
