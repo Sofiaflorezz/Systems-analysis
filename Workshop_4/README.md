@@ -1,78 +1,83 @@
 # Workshop 4 – Computational Simulation Report  
 **Analysis of Chaos and Non-Linear Dynamics in the MoA Prediction System**
 
-Este repositorio contiene el informe y recursos del **Workshop 4**, enfocado en la simulación computacional y el análisis de dinámicas caóticas en un sistema de predicción de **Mechanisms of Action (MoA)** a partir de datos biológicos de alta dimensión (reto de Kaggle).
+This part of the project focuses on the computational simulation stage, where we analyze chaotic and non-linear behavior in a system for predicting **Mechanisms of Action (MoA)** from high-dimensional biological data (Kaggle challenge).
 
 
-## Objetivo del proyecto
 
-Validar empíricamente la arquitectura propuesta en talleres previos, evaluando:
+## Project Overview
 
-- La **sensibilidad del sistema** a perturbaciones en la distribución de entrada, especialmente en el parámetro `cp_time`.
-- La presencia de **comportamientos no lineales y caóticos** que afecten la estabilidad del desempeño del modelo.
-- Propuestas de refinamiento arquitectónico para hacer el sistema más robusto y confiable.
+The main goal of this workshop is to **empirically validate** a previously proposed architecture by:
 
-
-## Datos y preprocesamiento
-
-- Filtrado de controles y preparación del dataset de entrenamiento.
-- **Estandarización** diferenciada por tipo de feature (genes, células, metadata, etc.).
-- **Reducción dimensional** mediante PCA para mitigar ruido y correlaciones fuertes.
-- Diseño de escenarios para probar cambios explícitos en la distribución de `cp_time`.
+- Studying the **sensitivity of the system** to distribution shifts in the input data, especially the metadata parameter `cp_time`.
+- Identifying potential **non-linear and chaotic behaviors** that affect model performance and stability.
+- Proposing architectural improvements to make the MoA prediction system more **robust and trustworthy**.
 
 
-## Escenarios de simulación
 
-### Escenario 1 – Modelo de Machine Learning (Random Forest)
+## Data and Preprocessing
 
-- Modelo **Random Forest multi-salida** entrenado sobre el dataset preprocesado.
-- Se aplican **perturbaciones controladas** en la distribución de `cp_time`.
-- Se evalúa la estabilidad del desempeño mediante:
-  - **Log-loss medio**
-  - **Desviación estándar**
-  - **Coeficiente de variación (CoV)**
+The pipeline includes:
 
-El objetivo es cuantificar qué tan estable es el modelo frente a cambios sutiles en la distribución de entrada.
-
-### Escenario 2 – Autómata Celular (Cellular Automata, CA)
-
-- Implementación de un **autómata celular 2D** que modela la propagación de señales biológicas locales.
-- Búsqueda de un **punto de bifurcación** donde el sistema pasa:
-  - De un comportamiento estable/predecible  
-  - A un régimen de **caos espaciotemporal**, altamente sensible a los parámetros de control (metadata).
+- Filtering control samples and preparing the training dataset.
+- **Standardizing features** by type (gene expression, cell features, metadata, etc.).
+- **Dimensionality reduction** with PCA to mitigate noise and strong correlations.
+- Designing controlled perturbation scenarios that explicitly modify the distribution of `cp_time`.
 
 
-## Resultados principales
 
-- El sistema muestra **alta sensibilidad** a perturbaciones en `cp_time`, reflejada en un incremento notable del CoV y la variabilidad del log-loss.
-- El autómata celular evidencia la existencia de un umbral de parámetros donde la dinámica se vuelve **caótica**, reforzando la interpretación de que el sistema completo puede entrar en regiones de comportamiento no lineal difícil de controlar.
+## Simulation Scenarios
+
+### Scenario 1 – Machine Learning Model (Random Forest)
+
+- A **multi-output Random Forest** model is trained on the preprocessed dataset.
+- The distribution of `cp_time` is **systematically perturbed**.
+- Performance stability is evaluated using:
+  - **Mean log-loss**
+  - **Standard deviation**
+  - **Coefficient of Variation (CoV)**
+
+This scenario quantifies how stable the model is when exposed to subtle but structured changes in the input distribution.
+
+### Scenario 2 – Cellular Automaton (CA)
+
+- A 2D **cellular automaton** is implemented to model the propagation of local biological signals.
+- The system is analyzed for the presence of a **bifurcation point**, where the dynamics transition:
+  - From stable and predictable  
+  - To a regime of **spatiotemporal chaos**, highly sensitive to control parameters derived from metadata.
 
 
-## Propuestas arquitectónicas
 
-Para robustecer el sistema de predicción MoA, el informe propone:
+## Key Findings
 
-1. **Módulo activo de validación de distribución**  
-   - Detectar cambios en la distribución de entrada antes de hacer predicciones.
-   - Disparar alertas o estrategias de recalibración cuando se detecten “shifts” significativos.
-
-2. **Arquitectura Mixture of Experts estratificada por `cp_time`**  
-   - Modelos especializados por rango de `cp_time`.
-   - Mezcla ponderada de expertos en función de la metadata observada.
-
-3. **Incorporación de incertidumbre bayesiana (p. ej. MC Dropout)**  
-   - Reportar junto con cada predicción una **medida explícita de confianza**.
-   - Permitir decisiones más informadas en presencia de posibles regiones caóticas del espacio de entrada.
+- The MoA prediction system exhibits **high sensitivity** to distribution shifts in `cp_time`, reflected in increased CoV and log-loss variability under perturbations.
+- The cellular automaton experiments reveal a parameter threshold where the dynamics become **chaotic**, supporting the idea that the overall system can enter regions of complex, hard-to-control behavior.
 
 
-## Contenido del repositorio (sugerido)
 
-- `report/`  
-  Informe en PDF del Workshop 4.
-- `notebooks/`  
-  Notebooks con experimentos de Random Forest y perturbación de `cp_time`.
-- `ca_simulation/`  
-  Implementación del autómata celular y experimentos de caos.
-- `data/`  
-  Scripts de preprocesamiento y/o muestras de datos (si aplica).
+## Architectural Recommendations
 
+To make the MoA prediction system more resilient, the report proposes:
+
+1. **Active Distribution-Validation Module**  
+   - Continuously monitor input distributions.
+   - Detect significant shifts before prediction and trigger alerts or recalibration strategies.
+
+2. **Stratified Mixture-of-Experts Architecture (by `cp_time`)**  
+   - Train specialized models for different `cp_time` ranges.
+   - Combine their outputs using a mixture-of-experts approach driven by metadata.
+
+3. **Bayesian-style Uncertainty Estimation (e.g., MC Dropout)**  
+   - Attach an explicit **uncertainty estimate** to each prediction.
+   - Enable more informed decision-making in regions where the model may behave chaotically.
+
+
+
+## Suggested Repository Structure
+
+> Adjust or rename these folders according to your actual project layout.
+
+- `report/` – PDF of the Workshop 4 simulation report.  
+- `notebooks/` – Jupyter notebooks for Random Forest experiments and `cp_time` perturbations.  
+- `ca_simulation/` – Cellular automaton implementation and chaos experiments.  
+- `data/` – Data preprocessing scripts and/or sample datasets (if applicable).
